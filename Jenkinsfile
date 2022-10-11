@@ -42,7 +42,7 @@ pipeline {
       steps {
         script {
           sh '''
-            curl -I http://127.0.0.1:${PORT_EXPOSED} | grep -q "les titres de la page"
+            curl http://127.0.0.1:${PORT_EXPOSED} | grep -q "les titres de la page"
              '''
         }
       }
