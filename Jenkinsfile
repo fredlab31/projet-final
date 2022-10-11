@@ -4,11 +4,12 @@ pipeline {
     IMAGE_NAME = "ic-webapp"
     PORT_EXPOSED = "80"
     DOCKERHUB_PASSWORD  = credentials('dockerhub')
-    script { '''
+    script { 
+        sh '''
         ODOO=$(awk '/ODOO/ {sub(/^.**URL/,"");print $2}' releases.txt)
         PGADMIN=$(awk '/PGADMIN/ {sub(/^.**URL/,"");print $2}' releases.txt)
         VER=$(awk '/version:/ {sub(/^.**version:/,"");print $1}' releases.txt)
-    '''
+        '''
     }
   }
   agent none
