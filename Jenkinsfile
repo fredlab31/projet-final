@@ -4,9 +4,9 @@ pipeline {
     ID_DOCKER = "fredlab"
     IMAGE_NAME = "ic-webapp"
     PORT_EXPOSED = "80"
-    ODOO = "${sh(script:'awk '/ODOO/ {sub(/^.**URL/,"");print $2}' releases.txt', returnStdout: true).trim()}"
-    PGADMIN = "${sh(script:'awk '/PGADMIN/ {sub(/^.**URL/,"");print $2}' releases.txt', returnStdout: true).trim()}"
-    VER = "${sh(script:'awk '/version:/ {sub(/^.**version:/,"");print $1}' releases.txt', returnStdout: true).trim()}"
+    ODOO = "${sh(script:'awk \'/ODOO/ {sub(/^.**URL/,\"\");print $2}\' releases.txt', returnStdout: true).trim()}"
+    PGADMIN = "${sh(script:'awk \'/PGADMIN/ {sub(/^.**URL/,\"\");print $2}\' releases.txt', returnStdout: true).trim()}"
+    VER = "${sh(script:'awk \'/version:/ {sub(/^.**version:/,\"\");print $1}\' releases.txt', returnStdout: true).trim()}"
     // TEST = "${sh(script:'echo test', returnStdout: true).trim()}"
   }
   stages {
