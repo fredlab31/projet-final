@@ -4,6 +4,7 @@ pipeline {
     IMAGE_NAME = "ic-webapp"
     PORT_EXPOSED = "80"
     DOCKERHUB_PASSWORD  = credentials('dockerhub')
+    VER = ""
   }
   agent none
   stages {
