@@ -1,4 +1,5 @@
 pipeline {
+  agent any
   environment {
     ID_DOCKER = "fredlab"
     IMAGE_NAME = "ic-webapp"
@@ -8,10 +9,9 @@ pipeline {
     // VER = "${sh(script:'awk '/version:/ {sub(/^.**version:/,"");print $1}' releases.txt', returnStdout: true).trim()}"
     TEST = "${sh(script:'echo test', returnStdout: true).trim()}"
   }
-  agent none
   stages {
     stage('Build ic-webapp image') {
-      agent any
+    //   agent any
       environment {
         DOCKERHUB_PASSWORD  = credentials('dockerhub')
       }
@@ -25,7 +25,7 @@ pipeline {
       }
     }
     stage('Run container based on builded image') {
-      agent any
+    //   agent any
       steps {
         script {
           sh '''
@@ -38,7 +38,7 @@ pipeline {
       }
     }
     stage('Test image') {
-      agent any
+    //   agent any
       steps {
         script {
           sh '''
