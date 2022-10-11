@@ -4,7 +4,12 @@ pipeline {
     IMAGE_NAME = "ic-webapp"
     PORT_EXPOSED = "80"
     DOCKERHUB_PASSWORD  = credentials('dockerhub')
-    VER = ""
+    script: '''
+        echo $DOCKERHUB_PASSWORD_PSW | docker login -u $ID_DOCKER --password-stdin
+        ODOO=$(awk '/ODOO/ {sub(/^.**URL/,"");print $2}' releases.txt)
+        PGADMIN=$(awk '/PGADMIN/ {sub(/^.**URL/,"");print $2}' releases.txt)
+        VER=$(awk '/version:/ {sub(/^.**version:/,"");print $1}' releases.txt)
+    '''
   }
   agent none
   stages {
@@ -13,10 +18,10 @@ pipeline {
       steps {
         script {
           sh '''
-            echo $DOCKERHUB_PASSWORD_PSW | docker login -u $ID_DOCKER --password-stdin
-            ODOO=$(awk '/ODOO/ {sub(/^.**URL/,"");print $2}' releases.txt)
-            PGADMIN=$(awk '/PGADMIN/ {sub(/^.**URL/,"");print $2}' releases.txt)
-            VER=$(awk '/version:/ {sub(/^.**version:/,"");print $1}' releases.txt)
+            // echo $DOCKERHUB_PASSWORD_PSW | docker login -u $ID_DOCKER --password-stdin
+            // ODOO=$(awk '/ODOO/ {sub(/^.**URL/,"");print $2}' releases.txt)
+            // PGADMIN=$(awk '/PGADMIN/ {sub(/^.**URL/,"");print $2}' releases.txt)
+            // VER=$(awk '/version:/ {sub(/^.**version:/,"");print $1}' releases.txt)
             docker build --build-arg odoo=${ODOO} --build-arg pgadmin=${PGADMIN} -t ${ID_DOCKER}/${IMAGE_NAME}:${VER} .             
             '''
         }
