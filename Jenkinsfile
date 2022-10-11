@@ -28,7 +28,7 @@ pipeline {
           sh '''
             echo "Clean Environment"
             docker rm -f $IMAGE_NAME || echo "container does not exist"
-            docker run --name $IMAGE_NAME -d -p ${PORT_EXPOSED}:8080 ${ID_DOCKER}/$IMAGE_NAME:$IMAGE_TAG
+            docker run --name $IMAGE_NAME -d -p ${PORT_EXPOSED}:8080 ${ID_DOCKER}/$IMAGE_NAME:$VER
             sleep 5
              '''
         }
