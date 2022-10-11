@@ -7,25 +7,18 @@ pipeline {
     ODOO = "${sh(script:'awk \'/ODOO/ {sub(/^.**URL/,\"\");print $2}\' releases.txt', returnStdout: true).trim()}"
     PGADMIN = "${sh(script:'awk \'/PGADMIN/ {sub(/^.**URL/,\"\");print $2}\' releases.txt', returnStdout: true).trim()}"
     VER = "${sh(script:'awk \'/version:/ {sub(/^.**version:/,\"\");print $1}\' releases.txt', returnStdout: true).trim()}"
-    // TEST = "${sh(script:'echo test', returnStdout: true).trim()}"
   }
   stages {
     stage('Build ic-webapp image') {
-    //   agent any
-      environment {
-        DOCKERHUB_PASSWORD  = credentials('dockerhub')
-      }
       steps {
         script {
           sh '''
-            echo $DOCKERHUB_PASSWORD_PSW | docker login -u $ID_DOCKER --password-stdin
             docker build --build-arg odoo=${ODOO} --build-arg pgadmin=${PGADMIN} -t ${ID_DOCKER}/${IMAGE_NAME}:${VER} .             
             '''
         }
       }
     }
     stage('Run container based on builded image') {
-    //   agent any
       steps {
         script {
           sh '''
@@ -38,7 +31,6 @@ pipeline {
       }
     }
     stage('Test image') {
-    //   agent any
       steps {
         script {
           sh '''
@@ -47,31 +39,31 @@ pipeline {
         }
       }
     }
-//     stage('Clean Container') {
-//       agent any
-//       steps {
-//         script {
-//           sh '''
-//             docker stop $IMAGE_NAME
-//             docker rm $IMAGE_NAME
-//              '''
-//         }
-//       }
-//     }
-//     stage ('Login and Push Image on docker hub') {
-//       agent any
-//       environment {
-//         DOCKERHUB_PASSWORD  = credentials('dockerhub')
-//       }            
-//       steps {
-//         script {
-//           sh '''
-//             echo $DOCKERHUB_PASSWORD_PSW | docker login -u $ID_DOCKER --password-stdin
-//             docker push ${ID_DOCKER}/$IMAGE_NAME:$IMAGE_TAG
-//              '''
-//         }
-//       }
-//     }    
+    stage('Clean Container') {
+      agent any
+      steps {
+        script {
+          sh '''
+            docker stop $IMAGE_NAME
+            docker rm $IMAGE_NAME
+             '''
+        }
+      }
+    }
+    stage ('Login and Push Image on docker hub') {
+      agent any
+      environment {
+        DOCKERHUB_PASSWORD  = credentials('dockerhub')
+      }            
+      steps {
+        script {
+          sh '''
+            echo $DOCKERHUB_PASSWORD_PSW | docker login -u $ID_DOCKER --password-stdin
+            docker push ${ID_DOCKER}/$IMAGE_NAME:$IMAGE_TAG
+             '''
+        }
+      }
+    }    
 //     stage('Push image in staging and deploy it') {
 //       when {
 //         expression { GIT_BRANCH == 'origin/master' }
