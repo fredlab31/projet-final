@@ -32,7 +32,7 @@ pipeline {
             echo "Clean Environment"
             docker rm -f $IMAGE_NAME || echo "container does not exist"
             docker run --name $IMAGE_NAME -d -p ${PORT_EXPOSED}:8080 ${ID_DOCKER}/$IMAGE_NAME:$VER
-            sleep 10
+            sleep 5
              '''
         }
       }
@@ -42,7 +42,7 @@ pipeline {
       steps {
         script {
           sh '''
-            curl http://127.0.0.1:${PORT_EXPOSED} | grep -q "les titres de la page"
+            curl http://192.168.56.8:${PORT_EXPOSED} | grep -q "les titres de la page"
              '''
         }
       }
